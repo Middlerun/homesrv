@@ -123,6 +123,26 @@
         </form>
     </div>
 
+    {{-- API Token --}}
+    @if(!empty($settings['api_token']))
+    <div class="card">
+        <h2>API Token</h2>
+        <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 0.5rem;">Use this token to connect the Kobo client. Keep it private.</p>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <input type="text" value="{{ $settings['api_token'] }}" readonly
+                   style="flex: 1; font-family: monospace; font-size: 0.85rem; padding: 0.5rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 4px; color: var(--color-text);"
+                   onclick="this.select()">
+            <button type="button" class="btn btn-secondary" style="white-space: nowrap;"
+                    onclick="navigator.clipboard.writeText('{{ $settings['api_token'] }}')">Copy</button>
+        </div>
+        <form method="POST" action="/settings/index.php" style="margin: 0;"
+              onsubmit="return confirm('Regenerate the API token? The old token will stop working.')">
+            <input type="hidden" name="action" value="regenerate_token">
+            <button type="submit" class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Regenerate token</button>
+        </form>
+    </div>
+    @endif
+
     {{-- Timezone --}}
     <div class="card">
         <h2>Timezone</h2>

@@ -77,6 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Setting::set('timezone', trim($_POST['timezone'] ?? 'UTC'));
             Bootstrap::flash('success', 'Timezone saved.');
             break;
+
+        case 'regenerate_token':
+            Setting::set('api_token', bin2hex(random_bytes(16)));
+            Bootstrap::flash('success', 'API token regenerated.');
+            break;
     }
 
     Bootstrap::redirect('/settings/');
@@ -86,6 +91,13 @@ $hasPassword = Setting::get('app_password_hash') !== null;
 $users = User::all();
 $feeds = CalendarFeed::all();
 $settings = Setting::all();
+
+// Ensure API token exists
+if (empty($settings['api_token'])) {
+    $settings['api_token'] = bin2hex(random_bytes(16));
+    Setting::set('api_token', $settings['api_token']);
+}
+
 $success = Bootstrap::getFlash('success');
 
 echo Bootstrap::blade()->run('settings.index', [

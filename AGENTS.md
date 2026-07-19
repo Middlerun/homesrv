@@ -4,7 +4,7 @@ Household task tracking web app. PHP 8.1+, SQLite, HTMX, BladeOne templating.
 
 ## Quick reference
 
-- **Web root**: `public/` (served by Apache on port 8080)
+- **Web root**: `public/` (served by Apache on port 8082)
 - **Database**: `database/homesrv.sqlite` (created by `php bin/setup.php`)
 - **Plan**: `~/.claude/plans/sunny-frolicking-bentley.md`
 
@@ -15,7 +15,7 @@ Use `?_db=test.sqlite` to run against a separate database, keeping the productio
 ```bash
 php bin/setup.php test.sqlite
 # Then use ?_db=test.sqlite on all URLs in curl commands
-curl -s "http://localhost:8080/tasks/?_db=test.sqlite"
+curl -s "http://localhost:8082/tasks/?_db=test.sqlite"
 ```
 
 Clean up with `rm database/test.sqlite` when done.

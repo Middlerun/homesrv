@@ -24,8 +24,13 @@ class Bootstrap
         // Ensure DB exists
         Database::get();
 
-        // Auth check
-        Auth::check();
+        // Auth check — API routes use token, web routes use session
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        if (str_starts_with($path, '/api/')) {
+            Auth::checkApiToken();
+        } else {
+            Auth::check();
+        }
     }
 
     public static function blade(): BladeOne

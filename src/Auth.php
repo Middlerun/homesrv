@@ -59,6 +59,23 @@ class Auth
         return false;
     }
 
+    public static function checkApiToken(): void
+    {
+        $token = $_SERVER['HTTP_X_API_TOKEN'] ?? '';
+        $stored = Setting::get('api_token');
+
+        if ($stored === null) {
+            $stored = bin2hex(random_bytes(16));
+            Setting::set('api_token', $stored);
+        }
+
+        if ($token !== $stored) {
+            http_response_code(401);
+            header('Content-Type: application/json');
+            die(json_encode(['error' => 'unauthorized']));
+        }
+    }
+
     public static function logout(): void
     {
         session_destroy();
