@@ -40,3 +40,10 @@ Clean up with `rm database/test.sqlite` when done.
 - **Add a dependency**: `composer require package/name`
 - **Reset DB**: `rm database/homesrv.sqlite && php bin/setup.php`
 - **Fetch calendars**: `php bin/fetch-calendars.php` (also meant for cron)
+
+## Kobo client
+
+`kobo/` holds a native e-ink client skeleton for Kobo e-readers (C + FBInk,
+cross-compiled via the NickelTC podman image, launched by NickelMenu on the
+device). Build with `make -C kobo`; install onto a USB-mounted Kobo with
+`make -C kobo install`. See `kobo/README.md`.
