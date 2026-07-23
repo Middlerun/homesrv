@@ -74,7 +74,7 @@ class WeatherService
         $tempUnit = $units === 'fahrenheit' ? 'fahrenheit' : 'celsius';
 
         $url = sprintf(
-            'https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=%s&timezone=auto&forecast_days=5',
+            'https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&current=temperature_2m,weather_code,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&temperature_unit=%s&timezone=auto&forecast_days=5',
             urlencode($lat),
             urlencode($lon),
             $tempUnit
@@ -110,6 +110,8 @@ class WeatherService
             'temperature' => round($json['current']['temperature_2m']),
             'code' => $json['current']['weather_code'] ?? 0,
             'description' => self::WMO_CODES[$json['current']['weather_code'] ?? 0] ?? 'Unknown',
+            'humidity' => $json['current']['relative_humidity_2m'] ?? null,
+            'rain_chance' => $json['daily']['precipitation_probability_max'][0] ?? null,
             'forecast' => $forecast,
         ];
     }

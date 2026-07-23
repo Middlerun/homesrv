@@ -6,3 +6,5 @@
 /kobo/dist/
 /kobo/vendor/
 /.claude/
+database/homesrv.sqlite-shm
+database/homesrv.sqlite-wal

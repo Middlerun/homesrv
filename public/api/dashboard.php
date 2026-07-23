@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use HomeSrv\Bootstrap;
+use HomeSrv\Models\CalendarFeed;
 use HomeSrv\Models\Task;
 use HomeSrv\Services\CalendarService;
 use HomeSrv\Services\WeatherService;
@@ -34,6 +35,19 @@ foreach ($tasks as $task) {
         'assigned_name' => $task['assigned_name'],
         'status' => $status,
     ];
+}
+
+// Refresh calendar feeds if cache is stale (>15 min)
+$feeds = CalendarFeed::enabled();
+$needsRefresh = false;
+foreach ($feeds as $feed) {
+    if (!$feed['cached_at'] || (time() - strtotime($feed['cached_at'])) > 900) {
+        $needsRefresh = true;
+        break;
+    }
+}
+if ($needsRefresh) {
+    CalendarService::fetchAll();
 }
 
 $events = CalendarService::getUpcomingEvents(7);

@@ -89,6 +89,11 @@ body.dashboard {
     color: #e2e8f0;
 }
 
+.dash-btn-delete {
+    background: #dc2626;
+    color: white;
+}
+
 /* Dashboard calendar events */
 .dash-event-date {
     color: #94a3b8;

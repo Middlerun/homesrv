@@ -29,6 +29,12 @@
                     hx-get="/tasks/defer.php?task_id={{ $task['id'] }}"
                     hx-target="#defer-modal"
                     hx-swap="innerHTML">Defer</button>
+                <button class="dash-btn dash-btn-delete"
+                    hx-post="/tasks/delete.php"
+                    hx-vals='{"task_id": {{ $task['id'] }}}'
+                    hx-target="#task-{{ $task['id'] }}"
+                    hx-swap="outerHTML"
+                    hx-confirm="Delete this task?">Del</button>
             </div>
         </div>
     @endforeach
