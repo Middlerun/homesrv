@@ -108,6 +108,8 @@ class WeatherService
 
         return [
             'temperature' => round($json['current']['temperature_2m']),
+            'today_high' => isset($daily['temperature_2m_max'][0]) ? round($daily['temperature_2m_max'][0]) : null,
+            'today_low' => isset($daily['temperature_2m_min'][0]) ? round($daily['temperature_2m_min'][0]) : null,
             'code' => $json['current']['weather_code'] ?? 0,
             'description' => self::WMO_CODES[$json['current']['weather_code'] ?? 0] ?? 'Unknown',
             'humidity' => $json['current']['relative_humidity_2m'] ?? null,
