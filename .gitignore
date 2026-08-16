@@ -1,5 +1,4 @@
 /vendor/
-/cache/
 /database/*.sqlite
 /storage/weather_cache.json
 /kobo/build/
