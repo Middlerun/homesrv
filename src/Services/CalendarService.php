@@ -76,6 +76,7 @@ class CalendarService
                 foreach ($expanded->VEVENT ?? [] as $vevent) {
                     $dtstart = $vevent->DTSTART->getDateTime();
                     $isAllDay = !$vevent->DTSTART->hasTime();
+                    $local = $isAllDay ? $dtstart : $dtstart->setTimezone($tz);
 
                     $uid = (string) $vevent->UID;
                     if ($uid === '') {
@@ -91,13 +92,13 @@ class CalendarService
                         'uid' => $uid,
                         'feed_id' => (int) $feed['id'],
                         'summary' => (string) $vevent->SUMMARY,
-                        'date' => $dtstart->format('Y-m-d'),
-                        'time' => $isAllDay ? null : $dtstart->setTimezone($tz)->format('g:ia'),
+                        'date' => $local->format('Y-m-d'),
+                        'time' => $isAllDay ? null : $local->format('g:ia'),
                         'color' => $feed['color'],
                         'feed_name' => $feed['name'],
                         'all_day' => $isAllDay,
                         'hidden' => $isHidden,
-                        '_sort_time' => $dtstart->setTimezone($tz)->format('H:i'),
+                        '_sort_time' => $local->format('H:i'),
                     ];
                 }
             } catch (\Exception $e) {
