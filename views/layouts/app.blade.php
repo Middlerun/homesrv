@@ -17,6 +17,7 @@
         </div>
         <div class="nav-links">
             <a href="/tasks/">Tasks</a>
+            <a href="/events/">Events</a>
             <a href="/dashboard/">Dashboard</a>
             <a href="/settings/">Settings</a>
         </div>

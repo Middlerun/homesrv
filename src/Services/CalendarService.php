@@ -5,6 +5,7 @@ namespace HomeSrv\Services;
 use DateTimeImmutable;
 use DateTimeZone;
 use HomeSrv\Models\CalendarFeed;
+use HomeSrv\Models\HiddenEvent;
 use HomeSrv\Models\Setting;
 use Sabre\VObject\Reader;
 
@@ -48,14 +49,19 @@ class CalendarService
 
     /**
      * Get upcoming events from all enabled feeds for the next N days.
+     *
+     * @param int $days Number of days ahead to include.
+     * @param bool $excludeHidden When true, hidden events are omitted (dashboard view).
+     * @return array
      */
-    public static function getUpcomingEvents(int $days = 7): array
+    public static function getUpcomingEvents(int $days = 7, bool $excludeHidden = true): array
     {
         $tz = new DateTimeZone(Setting::get('timezone', 'UTC'));
         $now = new DateTimeImmutable('today', $tz);
         $end = $now->modify("+{$days} days")->setTime(23, 59, 59);
 
         $feeds = CalendarFeed::enabled();
+        $hiddenMap = HiddenEvent::hiddenUids();
         $events = [];
 
         foreach ($feeds as $feed) {
@@ -71,13 +77,26 @@ class CalendarService
                     $dtstart = $vevent->DTSTART->getDateTime();
                     $isAllDay = !$vevent->DTSTART->hasTime();
 
+                    $uid = (string) $vevent->UID;
+                    if ($uid === '') {
+                        $uid = 'no-uid-' . md5((string) $vevent->SUMMARY . $dtstart->format('Y-m-d H:i:s'));
+                    }
+
+                    $isHidden = isset($hiddenMap[(int) $feed['id']][$uid]);
+                    if ($excludeHidden && $isHidden) {
+                        continue;
+                    }
+
                     $events[] = [
+                        'uid' => $uid,
+                        'feed_id' => (int) $feed['id'],
                         'summary' => (string) $vevent->SUMMARY,
                         'date' => $dtstart->format('Y-m-d'),
                         'time' => $isAllDay ? null : $dtstart->setTimezone($tz)->format('g:ia'),
                         'color' => $feed['color'],
                         'feed_name' => $feed['name'],
                         'all_day' => $isAllDay,
+                        'hidden' => $isHidden,
                         '_sort_time' => $dtstart->setTimezone($tz)->format('H:i'),
                     ];
                 }

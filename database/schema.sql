@@ -43,6 +43,14 @@ CREATE TABLE IF NOT EXISTS calendar_feeds (
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
+CREATE TABLE IF NOT EXISTS hidden_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    feed_id INTEGER NOT NULL REFERENCES calendar_feeds(id) ON DELETE CASCADE,
+    uid TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE(feed_id, uid)
+);
+
 CREATE TABLE IF NOT EXISTS settings (
     key TEXT PRIMARY KEY,
     value TEXT
