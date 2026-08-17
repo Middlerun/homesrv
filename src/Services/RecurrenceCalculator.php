@@ -16,27 +16,26 @@ class RecurrenceCalculator
     public static function advance(array $task, ?DateTimeImmutable $completedOn = null): string
     {
         $completedOn ??= new DateTimeImmutable('today');
-        $currentDue = new DateTimeImmutable($task['next_due']);
         $interval = max(1, (int) ($task['recur_interval'] ?? 1));
 
         return match ($task['recur_type']) {
-            'daily' => self::advanceDaily($currentDue, $interval),
-            'weekly' => self::advanceWeekly($currentDue, $interval, $task['recur_days'] ?? null),
-            'monthly' => self::advanceMonthly($currentDue, $interval),
+            'daily' => self::advanceDaily($completedOn, $interval),
+            'weekly' => self::advanceWeekly($completedOn, $interval, $task['recur_days'] ?? null),
+            'monthly' => self::advanceMonthly($completedOn, $interval),
             'interval' => self::advanceInterval($completedOn, $interval),
-            default => $currentDue->format('Y-m-d'),
+            default => $completedOn->format('Y-m-d'),
         };
     }
 
-    private static function advanceDaily(DateTimeImmutable $due, int $interval): string
+    private static function advanceDaily(DateTimeImmutable $date, int $interval): string
     {
-        return $due->modify("+{$interval} days")->format('Y-m-d');
+        return $date->modify("+{$interval} days")->format('Y-m-d');
     }
 
-    private static function advanceWeekly(DateTimeImmutable $due, int $interval, ?string $recurDays): string
+    private static function advanceWeekly(DateTimeImmutable $date, int $interval, ?string $recurDays): string
     {
         if ($recurDays === null || $recurDays === '') {
-            return $due->modify('+' . (7 * $interval) . ' days')->format('Y-m-d');
+            return $date->modify('+' . (7 * $interval) . ' days')->format('Y-m-d');
         }
 
         // Parse days (1=Mon..7=Sun) and sort
@@ -44,13 +43,13 @@ class RecurrenceCalculator
         sort($days);
 
         // Current ISO day of week (1=Mon..7=Sun)
-        $currentDay = (int) $due->format('N');
+        $currentDay = (int) $date->format('N');
 
         // Find the next day in the set after today
         foreach ($days as $day) {
             if ($day > $currentDay) {
                 $diff = $day - $currentDay;
-                return $due->modify("+{$diff} days")->format('Y-m-d');
+                return $date->modify("+{$diff} days")->format('Y-m-d');
             }
         }
 
@@ -60,16 +59,16 @@ class RecurrenceCalculator
         $skipWeeks = ($interval - 1) * 7;
         $daysToAdd = $daysUntilEndOfWeek + $skipWeeks + $firstDay;
 
-        return $due->modify("+{$daysToAdd} days")->format('Y-m-d');
+        return $date->modify("+{$daysToAdd} days")->format('Y-m-d');
     }
 
-    private static function advanceMonthly(DateTimeImmutable $due, int $interval): string
+    private static function advanceMonthly(DateTimeImmutable $date, int $interval): string
     {
-        return $due->modify("+{$interval} months")->format('Y-m-d');
+        return $date->modify("+{$interval} months")->format('Y-m-d');
     }
 
-    private static function advanceInterval(DateTimeImmutable $completedOn, int $interval): string
+    private static function advanceInterval(DateTimeImmutable $date, int $interval): string
     {
-        return $completedOn->modify("+{$interval} days")->format('Y-m-d');
+        return $date->modify("+{$interval} days")->format('Y-m-d');
     }
 }
