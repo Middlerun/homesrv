@@ -78,6 +78,7 @@ class CalendarService
                         'color' => $feed['color'],
                         'feed_name' => $feed['name'],
                         'all_day' => $isAllDay,
+                        '_sort_time' => $dtstart->setTimezone($tz)->format('H:i'),
                     ];
                 }
             } catch (\Exception $e) {
@@ -92,8 +93,14 @@ class CalendarService
             if ($cmp !== 0) return $cmp;
             if ($a['all_day'] && !$b['all_day']) return -1;
             if (!$a['all_day'] && $b['all_day']) return 1;
-            return strcmp($a['time'] ?? '', $b['time'] ?? '');
+            return strcmp($a['_sort_time'] ?? '', $b['_sort_time'] ?? '');
         });
+
+        // Drop the sort helper before returning
+        foreach ($events as &$event) {
+            unset($event['_sort_time']);
+        }
+        unset($event);
 
         return $events;
     }

@@ -48,6 +48,13 @@ class CalendarFeed
         $stmt->execute([$id]);
     }
 
+    public static function update(int $id, string $name, string $color): void
+    {
+        $db = Database::get();
+        $stmt = $db->prepare('UPDATE calendar_feeds SET name = ?, color = ? WHERE id = ?');
+        $stmt->execute([trim($name), $color, $id]);
+    }
+
     public static function toggleEnabled(int $id): void
     {
         $db = Database::get();

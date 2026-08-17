@@ -64,6 +64,10 @@
                             @endif
                         </div>
                         <div style="display: flex; gap: 0.3rem;">
+                            <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;"
+                                hx-get="/settings/edit-feed.php?feed_id={{ $feed['id'] }}"
+                                hx-target="#feed-modal"
+                                hx-swap="innerHTML">Edit</button>
                             <form method="POST" action="/settings/index.php" style="margin: 0;">
                                 <input type="hidden" name="action" value="toggle_feed">
                                 <input type="hidden" name="feed_id" value="{{ $feed['id'] }}">
@@ -161,4 +165,6 @@
             <a href="/logout.php" class="btn btn-secondary">Log out</a>
         </div>
     @endif
+
+    <div id="feed-modal"></div>
 @endsection
