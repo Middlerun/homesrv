@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 use HomeSrv\Bootstrap;
 use HomeSrv\Models\CalendarFeed;
+use HomeSrv\Models\Setting;
 use HomeSrv\Models\Task;
 use HomeSrv\Services\CalendarService;
 use HomeSrv\Services\WeatherService;
@@ -14,7 +15,10 @@ header('Content-Type: application/json');
 
 $tasks = Task::dashboard(50);
 
-$today = date('Y-m-d');
+$tz = new DateTimeZone(Setting::get('timezone', 'UTC'));
+$now = new DateTimeImmutable('now', $tz);
+$today = $now->format('Y-m-d');
+$tomorrow = $now->modify('+1 day')->format('Y-m-d');
 
 $taskList = [];
 foreach ($tasks as $task) {
@@ -54,7 +58,6 @@ $events = CalendarService::getUpcomingEvents(7);
 
 // Filter to today and tomorrow only
 $todayEvents = [];
-$tomorrow = date('Y-m-d', strtotime('+1 day'));
 foreach ($events as $event) {
     if ($event['date'] === $today || $event['date'] === $tomorrow) {
         $event['is_today'] = $event['date'] === $today;
@@ -64,7 +67,7 @@ foreach ($events as $event) {
 }
 
 echo json_encode([
-    'date' => date('l, F j, Y'),
+    'date' => $now->format('l, F j, Y'),
     'date_iso' => $today,
     'tasks' => $taskList,
     'calendar_events' => $todayEvents,
