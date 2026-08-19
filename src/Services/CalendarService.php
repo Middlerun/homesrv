@@ -78,6 +78,12 @@ class CalendarService
                     $isAllDay = !$vevent->DTSTART->hasTime();
                     $local = $isAllDay ? $dtstart : $dtstart->setTimezone($tz);
 
+                    $dtend = isset($vevent->DTEND)
+                        ? $vevent->DTEND->getDateTime()
+                        : $dtstart;
+                    $endLocal = $isAllDay ? $dtend : $dtend->setTimezone($tz);
+                    $isOver = $endLocal < new DateTimeImmutable('now', $tz);
+
                     $uid = (string) $vevent->UID;
                     if ($uid === '') {
                         $uid = 'no-uid-' . md5((string) $vevent->SUMMARY . $dtstart->format('Y-m-d H:i:s'));
@@ -97,6 +103,7 @@ class CalendarService
                         'color' => $feed['color'],
                         'feed_name' => $feed['name'],
                         'all_day' => $isAllDay,
+                        'is_over' => $isOver,
                         'hidden' => $isHidden,
                         '_sort_time' => $local->format('H:i'),
                     ];
