@@ -7,3 +7,4 @@
 /.claude/
 database/homesrv.sqlite-shm
 database/homesrv.sqlite-wal
+/kobo/fonts/.dejavu-stamp

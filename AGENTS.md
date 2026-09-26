@@ -43,7 +43,23 @@ Clean up with `rm database/test.sqlite` when done.
 
 ## Kobo client
 
-`kobo/` holds a native e-ink client skeleton for Kobo e-readers (C + FBInk,
+`kobo/` holds a native e-ink client for Kobo e-readers (C + FBInk,
 cross-compiled via the NickelTC podman image, launched by NickelMenu on the
 device). Build with `make -C kobo`; install onto a USB-mounted Kobo with
 `make -C kobo install`. See `kobo/README.md`.
+
+The UI is declarative: `kobo/src/screens.c` builds a tree of nodes and a layout
+engine assigns every node a rect. Touch targets come from the painted tree, so
+never hard-code hit rectangles. The schema is `kobo/docs/ui-schema.md`.
+
+**Do not iterate on Kobo layout by cross-compiling and reinstalling.** The
+layout engine builds for the host:
+
+```bash
+make -C kobo preview                   # PNGs in kobo/build/, ~1s
+make -C kobo preview FIXTURE=overflow  # busy day; also: empty
+make -C kobo test                      # golden rect comparison
+```
+
+After a deliberate layout change, `make -C kobo test` will fail; review the
+diff and the PNGs, then `make -C kobo golden` to accept.
