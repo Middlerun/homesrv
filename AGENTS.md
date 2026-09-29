@@ -33,6 +33,7 @@ Clean up with `rm database/test.sqlite` when done.
 - Services (`src/Services/`) contain business logic (recurrence, calendar, weather)
 - Views use Blade syntax in `views/`, compiled cache in `cache/`
 - Dashboard has its own dark-themed layout (`layouts/dashboard.blade.php`, `dashboard.css`)
+- The Kobo client's UI is built server-side in `src/Ui/` and served by `/api/ui.php`
 - Mobile interface uses the light-themed layout (`layouts/app.blade.php`, `app.css`)
 
 ## Common tasks
@@ -48,9 +49,18 @@ cross-compiled via the NickelTC podman image, launched by NickelMenu on the
 device). Build with `make -C kobo`; install onto a USB-mounted Kobo with
 `make -C kobo install`. See `kobo/README.md`.
 
-The UI is declarative: `kobo/src/screens.c` builds a tree of nodes and a layout
-engine assigns every node a rect. Touch targets come from the painted tree, so
-never hard-code hit rectangles. The schema is `kobo/docs/ui-schema.md`.
+The UI is declarative *and server-built*: `src/Ui/DashboardScreen.php` produces
+a tree of nodes, `/api/ui.php` serves it, and the client's layout engine assigns
+every node a rect. Touch targets come from the painted tree, so never hard-code
+hit rectangles. The schema is `kobo/docs/ui-schema.md`.
+
+**Change the dashboard's appearance in `src/Ui/`, not in C.** The device only
+needs rebuilding when the engine changes; `kobo/src/screens.c` is now just the
+chrome that must survive the server being down: the status line with its two
+invisible corner targets (refresh, menu), the message screen, and the menu that
+switches between the servers in `kobo/src/config.c`'s config file. Even the
+clock is server-sent, as a `{clock:...}` placeholder the device fills in each
+frame (see `UiVars` in `kobo/src/ui_json.h`).
 
 **Do not iterate on Kobo layout by cross-compiling and reinstalling.** The
 layout engine builds for the host:
