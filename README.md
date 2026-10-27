@@ -10,7 +10,7 @@ Household task tracking web app. PHP 8.1+, SQLite, HTMX, BladeOne templating.
 - **Weather** — current conditions + 5-day forecast via Open-Meteo (no API key)
 - **Web dashboard** — dark-themed wall display with tasks, calendar, and weather
 - **Mobile interface** — light-themed layout for phones
-- **Kobo dashboard** — serves a dashboard to Koboard, a native e-ink client for Kobo e-readers, at `/api/ui.php`
+- **Kobo dashboard** — serves a dashboard to [Koboard](https://github.com/Middlerun/koboard), a native e-ink client for Kobo e-readers, at `/api/ui.php`
 
 ## Requirements
 
