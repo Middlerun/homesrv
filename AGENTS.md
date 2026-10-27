@@ -63,13 +63,25 @@ clock is server-sent, as a `{clock:...}` placeholder the device fills in each
 frame (see `UiVars` in `kobo/src/ui_json.h`).
 
 **Do not iterate on Kobo layout by cross-compiling and reinstalling.** The
-layout engine builds for the host:
+layout engine builds for the host. For the dashboard (`src/Ui/`):
 
 ```bash
-make -C kobo preview                   # PNGs in kobo/build/, ~1s
-make -C kobo preview FIXTURE=overflow  # busy day; also: empty
-make -C kobo test                      # golden rect comparison
+bin/kobo-preview                       # PNGs in kobo/build/, ~1s
+bin/kobo-preview overflow              # busy day; also: empty, finished
+bin/test-ui                            # the trees /api/ui.php sends, vs goldens
 ```
 
-After a deliberate layout change, `make -C kobo test` will fail; review the
-diff and the PNGs, then `make -C kobo golden` to accept.
+After a deliberate dashboard change, `bin/test-ui` will fail; check the PNGs,
+then `bin/test-ui --update` to accept. Data fixtures are in `tests/ui/fixtures/`
+(recordings of `/api/dashboard.php`).
+
+The client is tested on its own, against UI-tree fixtures, with no PHP
+involved — it is meant to be extractable as a standalone app:
+
+```bash
+make -C kobo test                      # golden rect comparison
+make -C kobo golden                    # accept after a deliberate engine change
+```
+
+The protocol (screen URL, bearer token, envelope fields) is in
+`kobo/docs/ui-schema.md` under "The wire".

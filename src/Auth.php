@@ -59,9 +59,13 @@ class Auth
         return false;
     }
 
+    /**
+     * API clients authenticate with a standard bearer token:
+     * "Authorization: Bearer <token>".
+     */
     public static function checkApiToken(): void
     {
-        $token = $_SERVER['HTTP_X_API_TOKEN'] ?? '';
+        $token = self::bearerToken();
         $stored = Setting::get('api_token');
 
         if ($stored === null) {
@@ -69,11 +73,36 @@ class Auth
             Setting::set('api_token', $stored);
         }
 
-        if ($token !== $stored) {
+        if ($token === '' || !hash_equals($stored, $token)) {
             http_response_code(401);
             header('Content-Type: application/json');
             die(json_encode(['error' => 'unauthorized']));
         }
+    }
+
+    /**
+     * The token from an "Authorization: Bearer ..." header, or ''.
+     *
+     * Where the header turns up depends on how PHP is run: Apache keeps it out
+     * of the CGI environment unless told otherwise, so $_SERVER alone is not
+     * enough under every SAPI. getallheaders() sees it regardless.
+     */
+    private static function bearerToken(): string
+    {
+        $header = $_SERVER['HTTP_AUTHORIZATION']
+            ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+            ?? '';
+
+        if ($header === '' && function_exists('getallheaders')) {
+            foreach (getallheaders() as $name => $value) {
+                if (strcasecmp($name, 'Authorization') === 0) {
+                    $header = $value;
+                    break;
+                }
+            }
+        }
+
+        return preg_match('/^Bearer\s+(\S+)$/i', trim($header), $m) ? $m[1] : '';
     }
 
     public static function logout(): void

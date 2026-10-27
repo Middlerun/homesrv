@@ -8,9 +8,9 @@ namespace HomeSrv\Ui;
  * Point sizes are resolved to pixels on the device, against its own DPI, so
  * this stays resolution-independent. Only the spacing scales with the width.
  *
- * The client keeps its own copy of `margin` for the chrome it still draws
- * itself (the status line and the menu); the formula below is the one it uses,
- * in theme_init() in kobo/src/screens.c. Change one, change the other.
+ * `margin` uses the same formula as the Kobo client's own (theme_init() in
+ * kobo/src/screens.c), so the body lines up with the status line the client
+ * draws under it.
  */
 final class Theme
 {

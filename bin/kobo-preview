@@ -1,0 +1,39 @@
+#!/bin/sh
+# See the Kobo dashboard without a Kobo: build the tree from a fixture, the way
+# /api/ui.php would, and draw it with the client's own layout engine.
+#
+# This is the loop for editing src/Ui/: change the PHP, run this, look at the
+# PNG. About a second, no web server, no device.
+#
+#   bin/kobo-preview                    # tests/ui/fixtures/typical.json
+#   bin/kobo-preview overflow           # any fixture by name
+#   bin/kobo-preview typical --toast    # extra args go to the preview binary
+#
+# PNGs land in $KOBO_DIR/build/preview-<fixture>-<device>.png. KOBO_DIR is the
+# client's checkout (default: kobo/); DEVICES narrows the panels drawn.
+set -eu
+
+cd "$(dirname "$0")/.."
+
+KOBO_DIR="${KOBO_DIR:-kobo}"
+DEVICES="${DEVICES:-glo glohd}"
+FIXTURE="${1:-typical}"
+[ $# -gt 0 ] && shift
+
+DATA="tests/ui/fixtures/$FIXTURE.json"
+[ -f "$DATA" ] || { echo "no fixture $DATA" >&2; exit 2; }
+
+make -s -C "$KOBO_DIR" preview-bin font >/dev/null
+BIN="$KOBO_DIR/build/homesrv-preview"
+
+for dev in $DEVICES; do
+	# The client's own table of panel sizes, so the width the tree is built
+	# for is the width it is drawn at.
+	width="$("$BIN" --print-device "$dev" | cut -d' ' -f1)"
+	tree="$KOBO_DIR/build/ui-$FIXTURE-$dev.json"
+	php bin/render-ui.php "$DATA" --width "$width" > "$tree"
+	"$BIN" --ui "$tree" --device "$dev" --now 1758880860 \
+		--font "$KOBO_DIR/fonts/DejaVuSans.ttf" \
+		--font-bold "$KOBO_DIR/fonts/DejaVuSans-Bold.ttf" \
+		--out "$KOBO_DIR/build/preview-$FIXTURE-$dev.png" "$@"
+done

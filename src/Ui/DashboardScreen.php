@@ -31,6 +31,23 @@ final class DashboardScreen
         $this->theme = new Theme($screenWidth);
     }
 
+    /**
+     * The dashboard as the client receives it: the tree, plus how often to
+     * refresh it.
+     */
+    public function envelope(): array
+    {
+        return Screen::envelope(
+            $this->build(),
+            refreshSeconds: 1800,
+            // Relative to the screen's own URL (/api/ui.php), so it follows the
+            // server wherever it is hosted.
+            ping: 'ping.php',
+            pingSeconds: 10,
+            flashSeconds: 7200,
+        );
+    }
+
     public function build(): Node
     {
         $t = $this->theme;

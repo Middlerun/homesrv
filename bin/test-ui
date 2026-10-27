@@ -1,0 +1,60 @@
+#!/bin/sh
+# Golden tests for the Kobo dashboard's UI tree.
+#
+# Feeds every dashboard fixture (tests/ui/fixtures/, recordings of
+# /api/dashboard.php) through the same builder /api/ui.php uses, at each panel
+# width the dashboard is designed for, and compares the tree against a
+# checked-in copy. Any change to what the server sends shows up here.
+#
+# How the client *lays out* a tree is the client's to test (make -C kobo test);
+# to see this tree drawn, use bin/kobo-preview.
+#
+#   bin/test-ui            # compare (exit 1 on any difference)
+#   bin/test-ui --update   # accept the current output as the new goldens
+set -eu
+
+cd "$(dirname "$0")/.."
+
+MODE=check
+[ "${1:-}" = --update ] && MODE=update
+
+# Glo and Glo HD. Spacing in the tree scales with width, so each is its own
+# golden; height and DPI never reach the server's layout decisions.
+WIDTHS="758 1072"
+FIXTURES=tests/ui/fixtures
+GOLDEN=tests/ui/golden
+OUT="${TMPDIR:-/tmp}/homesrv-test-ui.$$"
+mkdir -p "$GOLDEN" "$OUT"
+trap 'rm -rf "$OUT"' EXIT
+
+fail=0
+for fixture in "$FIXTURES"/*.json; do
+	base="$(basename "$fixture" .json)"
+	for width in $WIDTHS; do
+		name="$base-$width"
+		php bin/render-ui.php "$fixture" --width "$width" --pretty > "$OUT/$name.json"
+
+		if [ "$MODE" = update ]; then
+			cp "$OUT/$name.json" "$GOLDEN/$name.json"
+			echo "updated $GOLDEN/$name.json"
+		elif [ ! -f "$GOLDEN/$name.json" ]; then
+			echo "MISSING golden for $name (run: bin/test-ui --update)"
+			fail=1
+		elif diff -u "$GOLDEN/$name.json" "$OUT/$name.json" > "$OUT/$name.diff"; then
+			echo "ok      $name"
+		else
+			echo "FAIL    $name"
+			head -40 "$OUT/$name.diff"
+			fail=1
+		fi
+	done
+done
+
+[ "$MODE" = update ] && exit 0
+if [ "$fail" -ne 0 ]; then
+	echo
+	echo "The dashboard's tree changed. Look at it with bin/kobo-preview, then"
+	echo "run 'bin/test-ui --update' to accept it."
+	exit 1
+fi
+echo "all UI tree tests passed"

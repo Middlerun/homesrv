@@ -1,0 +1,688 @@
+{
+    "schema": 1,
+    "screen": "dashboard",
+    "refresh": {
+        "seconds": 1800,
+        "ping": "ping.php",
+        "pingSeconds": 10,
+        "flashSeconds": 7200
+    },
+    "root": {
+        "kind": "box",
+        "h": "flex:1",
+        "children": [
+            {
+                "kind": "box",
+                "key": "clock",
+                "dir": "row",
+                "gap": 25,
+                "cross": 3,
+                "pad": [
+                    40,
+                    25,
+                    0,
+                    25
+                ],
+                "children": [
+                    {
+                        "kind": "text",
+                        "text": "{clock:%a, %b %e}",
+                        "size": 14,
+                        "w": "flex:1",
+                        "maxLines": 1
+                    },
+                    {
+                        "kind": "text",
+                        "text": "{clock:%I:%M}",
+                        "size": 14,
+                        "align": 2,
+                        "maxLines": 1
+                    }
+                ]
+            },
+            {
+                "kind": "box",
+                "pad": [
+                    0,
+                    25,
+                    0,
+                    25
+                ],
+                "children": [
+                    {
+                        "kind": "box",
+                        "h": "20"
+                    },
+                    {
+                        "kind": "box",
+                        "gap": 12,
+                        "children": [
+                            {
+                                "kind": "text",
+                                "text": "⛅  18°",
+                                "size": 30,
+                                "align": 1,
+                                "maxLines": 1
+                            },
+                            {
+                                "kind": "text",
+                                "text": "Partly cloudy · 22°/11° · ☂1.4mm · 💧64%",
+                                "size": 11,
+                                "align": 1,
+                                "maxLines": 1
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "box",
+                        "h": "40"
+                    },
+                    {
+                        "kind": "box",
+                        "dir": "row",
+                        "gap": 25,
+                        "children": [
+                            {
+                                "kind": "box",
+                                "dir": "col",
+                                "w": "flex:1",
+                                "gap": 2,
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "Sat",
+                                        "size": 10,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "☀",
+                                        "size": 14,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "24°/12°",
+                                        "size": 10,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "dir": "col",
+                                "w": "flex:1",
+                                "gap": 2,
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "Sun",
+                                        "size": 10,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "🌧",
+                                        "size": 14,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "19°/13°",
+                                        "size": 10,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "dir": "col",
+                                "w": "flex:1",
+                                "gap": 2,
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "Mon",
+                                        "size": 10,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "☁",
+                                        "size": 14,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "17°/10°",
+                                        "size": 10,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "dir": "col",
+                                "w": "flex:1",
+                                "gap": 2,
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "Tue",
+                                        "size": 10,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "🌤",
+                                        "size": 14,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "21°/11°",
+                                        "size": 10,
+                                        "align": 1,
+                                        "maxLines": 1
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "box",
+                        "h": "30"
+                    }
+                ]
+            },
+            {
+                "kind": "box",
+                "h": "4",
+                "bg": 64
+            },
+            {
+                "kind": "box",
+                "h": "30"
+            },
+            {
+                "kind": "box",
+                "dir": "row",
+                "h": "flex:1",
+                "children": [
+                    {
+                        "kind": "box",
+                        "dir": "col",
+                        "w": "flex:1",
+                        "gap": 25,
+                        "pad": [
+                            0,
+                            25,
+                            0,
+                            25
+                        ],
+                        "clip": true,
+                        "overflowText": "… +{n} more",
+                        "children": [
+                            {
+                                "kind": "text",
+                                "text": "TASKS",
+                                "size": 14,
+                                "maxLines": 1
+                            },
+                            {
+                                "kind": "box",
+                                "gap": 4,
+                                "key": "task-12",
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "Take out the recycling bins",
+                                        "size": 13,
+                                        "maxLines": 2
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "Was due yesterday · Eddie · weekly",
+                                        "size": 9,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "box",
+                                        "dir": "row",
+                                        "w": "60%",
+                                        "main": 1,
+                                        "cross": 2,
+                                        "pad": [
+                                            8,
+                                            12,
+                                            8,
+                                            12
+                                        ],
+                                        "bg": 192,
+                                        "border": 2,
+                                        "borderColor": 0,
+                                        "action": {
+                                            "kind": 1,
+                                            "path": "/api/tasks/complete.php",
+                                            "body": "task_id=12",
+                                            "toast": "COMPLETED!"
+                                        },
+                                        "children": [
+                                            {
+                                                "kind": "text",
+                                                "text": "Done",
+                                                "size": 9,
+                                                "fg": 0,
+                                                "style": 1,
+                                                "align": 1,
+                                                "maxLines": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "gap": 4,
+                                "key": "task-18",
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "Water the plants",
+                                        "size": 13,
+                                        "maxLines": 2
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "Due today · 18:00 · Sam · daily",
+                                        "size": 9,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "box",
+                                        "dir": "row",
+                                        "w": "60%",
+                                        "main": 1,
+                                        "cross": 2,
+                                        "pad": [
+                                            8,
+                                            12,
+                                            8,
+                                            12
+                                        ],
+                                        "bg": 192,
+                                        "border": 2,
+                                        "borderColor": 0,
+                                        "action": {
+                                            "kind": 1,
+                                            "path": "/api/tasks/complete.php",
+                                            "body": "task_id=18",
+                                            "toast": "COMPLETED!"
+                                        },
+                                        "children": [
+                                            {
+                                                "kind": "text",
+                                                "text": "Done",
+                                                "size": 9,
+                                                "fg": 0,
+                                                "style": 1,
+                                                "align": 1,
+                                                "maxLines": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "gap": 4,
+                                "key": "task-23",
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "Book the car in for its annual service",
+                                        "size": 13,
+                                        "maxLines": 2
+                                    },
+                                    {
+                                        "kind": "text",
+                                        "text": "Due on Monday · yearly",
+                                        "size": 9,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "box",
+                                        "dir": "row",
+                                        "w": "60%",
+                                        "main": 1,
+                                        "cross": 2,
+                                        "pad": [
+                                            8,
+                                            12,
+                                            8,
+                                            12
+                                        ],
+                                        "bg": 192,
+                                        "border": 2,
+                                        "borderColor": 0,
+                                        "action": {
+                                            "kind": 1,
+                                            "path": "/api/tasks/complete.php",
+                                            "body": "task_id=23",
+                                            "toast": "COMPLETED!"
+                                        },
+                                        "children": [
+                                            {
+                                                "kind": "text",
+                                                "text": "Done",
+                                                "size": 9,
+                                                "fg": 0,
+                                                "style": 1,
+                                                "align": 1,
+                                                "maxLines": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "box",
+                        "w": "4",
+                        "bg": 64
+                    },
+                    {
+                        "kind": "box",
+                        "dir": "col",
+                        "w": "flex:1",
+                        "gap": 4,
+                        "pad": [
+                            0,
+                            25,
+                            0,
+                            25
+                        ],
+                        "clip": true,
+                        "overflowText": "… +{n} more",
+                        "children": [
+                            {
+                                "kind": "text",
+                                "text": "TODAY",
+                                "size": 14,
+                                "maxLines": 1
+                            },
+                            {
+                                "kind": "box",
+                                "dir": "row",
+                                "gap": 4,
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "9:30am",
+                                        "size": 8,
+                                        "w": "40%",
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "box",
+                                        "dir": "col",
+                                        "w": "flex:1",
+                                        "gap": 2,
+                                        "children": [
+                                            {
+                                                "kind": "text",
+                                                "text": "Standup",
+                                                "size": 8,
+                                                "maxLines": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "dir": "row",
+                                "gap": 4,
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "10:15am",
+                                        "size": 8,
+                                        "w": "40%",
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "box",
+                                        "dir": "col",
+                                        "w": "flex:1",
+                                        "gap": 2,
+                                        "children": [
+                                            {
+                                                "kind": "text",
+                                                "text": "Code review",
+                                                "size": 8,
+                                                "maxLines": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "dir": "row",
+                                "gap": 4,
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "12:30pm",
+                                        "size": 8,
+                                        "w": "40%",
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "box",
+                                        "dir": "col",
+                                        "w": "flex:1",
+                                        "gap": 2,
+                                        "children": [
+                                            {
+                                                "kind": "text",
+                                                "text": "Lunch with Priya",
+                                                "size": 8,
+                                                "maxLines": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "dir": "row",
+                                "gap": 4,
+                                "pad": [
+                                    21,
+                                    0,
+                                    0,
+                                    0
+                                ],
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "2:30pm",
+                                        "size": 11,
+                                        "w": "40%",
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "box",
+                                        "dir": "col",
+                                        "w": "flex:1",
+                                        "gap": 2,
+                                        "children": [
+                                            {
+                                                "kind": "text",
+                                                "text": "Dentist appointment",
+                                                "size": 11,
+                                                "maxLines": 3
+                                            },
+                                            {
+                                                "kind": "text",
+                                                "text": "— Personal",
+                                                "size": 8,
+                                                "maxLines": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "dir": "row",
+                                "gap": 4,
+                                "pad": [
+                                    21,
+                                    0,
+                                    0,
+                                    0
+                                ],
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "7:00pm",
+                                        "size": 11,
+                                        "w": "40%",
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "box",
+                                        "dir": "col",
+                                        "w": "flex:1",
+                                        "gap": 2,
+                                        "children": [
+                                            {
+                                                "kind": "text",
+                                                "text": "Dinner with the Hendersons at that new place on Brunswick Street",
+                                                "size": 11,
+                                                "maxLines": 3
+                                            },
+                                            {
+                                                "kind": "text",
+                                                "text": "— Personal",
+                                                "size": 8,
+                                                "maxLines": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "text",
+                                "text": "TOMORROW",
+                                "size": 14,
+                                "maxLines": 1,
+                                "pad": [
+                                    21,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "dir": "row",
+                                "gap": 4,
+                                "pad": [
+                                    21,
+                                    0,
+                                    0,
+                                    0
+                                ],
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "All day",
+                                        "size": 11,
+                                        "w": "40%",
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "box",
+                                        "dir": "col",
+                                        "w": "flex:1",
+                                        "gap": 2,
+                                        "children": [
+                                            {
+                                                "kind": "text",
+                                                "text": "Bin night",
+                                                "size": 11,
+                                                "maxLines": 3
+                                            },
+                                            {
+                                                "kind": "text",
+                                                "text": "— Home",
+                                                "size": 8,
+                                                "maxLines": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "box",
+                                "dir": "row",
+                                "gap": 4,
+                                "pad": [
+                                    21,
+                                    0,
+                                    0,
+                                    0
+                                ],
+                                "children": [
+                                    {
+                                        "kind": "text",
+                                        "text": "All day",
+                                        "size": 11,
+                                        "w": "40%",
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "kind": "box",
+                                        "dir": "col",
+                                        "w": "flex:1",
+                                        "gap": 2,
+                                        "children": [
+                                            {
+                                                "kind": "text",
+                                                "text": "Sam's birthday",
+                                                "size": 11,
+                                                "maxLines": 3
+                                            },
+                                            {
+                                                "kind": "text",
+                                                "text": "— Family",
+                                                "size": 8,
+                                                "maxLines": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

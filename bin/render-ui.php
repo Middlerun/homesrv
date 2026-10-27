@@ -17,7 +17,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use HomeSrv\Services\DashboardService;
 use HomeSrv\Ui\DashboardScreen;
-use HomeSrv\Ui\Screen;
 
 $args = array_slice($argv, 1);
 $width = 758;
@@ -74,4 +73,4 @@ $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
 if ($pretty) {
     $flags |= JSON_PRETTY_PRINT;
 }
-echo json_encode(Screen::envelope($screen->build()), $flags), "\n";
+echo json_encode($screen->envelope(), $flags), "\n";

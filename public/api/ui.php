@@ -18,7 +18,6 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use HomeSrv\Bootstrap;
 use HomeSrv\Services\DashboardService;
 use HomeSrv\Ui\DashboardScreen;
-use HomeSrv\Ui\Screen;
 
 Bootstrap::init();
 
@@ -32,4 +31,4 @@ if ($width < 200 || $width > 4000) {
 $screen = new DashboardScreen(DashboardService::data(), $width,
     DashboardService::timezone());
 
-echo json_encode(Screen::envelope($screen->build()), JSON_UNESCAPED_UNICODE);
+echo json_encode($screen->envelope(), JSON_UNESCAPED_UNICODE);
