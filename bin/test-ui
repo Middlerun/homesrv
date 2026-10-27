@@ -1,12 +1,12 @@
 #!/bin/sh
-# Golden tests for the Kobo dashboard's UI tree.
+# Golden tests for the Koboard dashboard's UI tree.
 #
 # Feeds every dashboard fixture (tests/ui/fixtures/, recordings of
 # /api/dashboard.php) through the same builder /api/ui.php uses, at each panel
 # width the dashboard is designed for, and compares the tree against a
 # checked-in copy. Any change to what the server sends shows up here.
 #
-# How the client *lays out* a tree is the client's to test (make -C kobo test);
+# How the client *lays out* a tree is Koboard's to test (make test, there);
 # to see this tree drawn, use bin/kobo-preview.
 #
 #   bin/test-ui            # compare (exit 1 on any difference)

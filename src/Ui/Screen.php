@@ -8,7 +8,7 @@ namespace HomeSrv\Ui;
  * Besides the tree, it carries how often the client should come back, and
  * where to check the server is alive. Every field but the tree is optional;
  * the client has a default for each, and limits on how far a server can push
- * it. See "The wire" in kobo/docs/ui-schema.md.
+ * it. See "The wire" in Koboard's docs/ui-schema.md.
  *
  * The client rejects a schema version it does not understand rather than
  * guessing.

@@ -1,10 +1,6 @@
 /vendor/
 /database/*.sqlite
 /storage/weather_cache.json
-/kobo/build/
-/kobo/dist/
-/kobo/vendor/
 /.claude/
 database/homesrv.sqlite-shm
 database/homesrv.sqlite-wal
-/kobo/fonts/.dejavu-stamp

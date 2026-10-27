@@ -6,10 +6,11 @@ use InvalidArgumentException;
 use JsonSerializable;
 
 /**
- * A node in a Kobo UI tree.
+ * A node in a Koboard UI tree.
  *
- * This is the server-side mirror of the BOX()/TEXT() macros in kobo/src/ui.h,
- * and it emits exactly the wire format documented in kobo/docs/ui-schema.md.
+ * This is the server-side mirror of the BOX()/TEXT() macros in Koboard's
+ * src/ui.h, and it emits exactly the wire format documented in Koboard's
+ * docs/ui-schema.md.
  * The device parses this into its own tree and lays it out; nothing here knows
  * about pixels beyond the lengths it is given.
  *
@@ -107,7 +108,7 @@ final class Node implements JsonSerializable
             }
             if (!isset($allowed[$name])) {
                 throw new InvalidArgumentException(
-                    "unknown $kind property '$name' (see kobo/docs/ui-schema.md)"
+                    "unknown $kind property '$name' (see Koboard's docs/ui-schema.md)"
                 );
             }
             $checked[$name] = self::coerce($name, $allowed[$name], $value);

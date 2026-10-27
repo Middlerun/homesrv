@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Render a Kobo UI tree on the command line.
+ * Render the Koboard dashboard's UI tree on the command line.
  *
- * Same builder as /api/ui.php, without the web server — which is what keeps
- * `make -C kobo preview` and the golden layout tests working from a fixture,
- * with no server and no device:
+ * Same builder as /api/ui.php, without the web server — which is what lets
+ * bin/kobo-preview and bin/test-ui work from a fixture, with no server and no
+ * device:
  *
- *   php bin/render-ui.php kobo/fixtures/typical.json --width 758
+ *   php bin/render-ui.php tests/ui/fixtures/typical.json --width 758
  *   php bin/render-ui.php --live --width 1072 --pretty
  *
  * The output is the same envelope the endpoint returns, on stdout.

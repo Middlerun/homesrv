@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Kobo dashboard as a UI tree.
+ * The Koboard dashboard as a UI tree.
  *
  * The device asks for a screen, gets a tree of boxes and text, and lays it out
  * and paints it. Everything about what the dashboard *looks like* is decided

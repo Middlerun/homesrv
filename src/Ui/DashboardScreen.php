@@ -6,18 +6,17 @@ use DateTimeImmutable;
 use DateTimeZone;
 
 /**
- * The Kobo dashboard, as a UI tree.
+ * The Koboard dashboard, as a UI tree.
  *
- * This is the server-side successor to screen_dashboard() in
- * kobo/src/screens.c: it decides what the dashboard looks like, and the device
- * only lays the result out and paints it. Changing the dashboard is a server
- * edit, not a new build on the device.
+ * Koboard (the e-ink client, its own repo) only lays out and paints what it is
+ * sent; this decides what the dashboard looks like. Changing the dashboard is
+ * a server edit, not a new build on the device.
  *
  * The tree built here is the *body* of the screen, clock included: the times
  * are placeholders (see Node::clock) that the device substitutes from its own
  * clock every frame. The client wraps the result in the one row it still owns,
  * the status line, which has to keep working while the server is unreachable.
- * See screen_frame() in kobo/src/screens.c.
+ * See screen_frame() in Koboard's src/screens.c.
  */
 final class DashboardScreen
 {
@@ -250,7 +249,7 @@ final class DashboardScreen
             'border' => 2,
             'borderColor' => Node::BLACK,
             // The toast is kept short so it fits the button on one line at
-            // both panel sizes (see kobo/docs/ui-schema.md).
+            // both panel sizes (see Koboard's docs/ui-schema.md).
             'action' => Node::post('/api/tasks/complete.php', "task_id=$taskId", 'COMPLETED!'),
         ], [
             Node::text('Done', [

@@ -1,6 +1,6 @@
 #!/bin/sh
-# See the Kobo dashboard without a Kobo: build the tree from a fixture, the way
-# /api/ui.php would, and draw it with the client's own layout engine.
+# See the Koboard dashboard without a Kobo: build the tree from a fixture, the
+# way /api/ui.php would, and draw it with Koboard's own layout engine.
 #
 # This is the loop for editing src/Ui/: change the PHP, run this, look at the
 # PNG. About a second, no web server, no device.
@@ -9,13 +9,16 @@
 #   bin/kobo-preview overflow           # any fixture by name
 #   bin/kobo-preview typical --toast    # extra args go to the preview binary
 #
-# PNGs land in $KOBO_DIR/build/preview-<fixture>-<device>.png. KOBO_DIR is the
-# client's checkout (default: kobo/); DEVICES narrows the panels drawn.
+# Needs a Koboard checkout, by default next to this repo (../koboard); point
+# KOBOARD_DIR elsewhere if yours is not. PNGs land in
+# $KOBOARD_DIR/build/preview-<fixture>-<device>.png. DEVICES narrows the panels.
 set -eu
 
 cd "$(dirname "$0")/.."
 
-KOBO_DIR="${KOBO_DIR:-kobo}"
+KOBO_DIR="${KOBOARD_DIR:-../koboard}"
+[ -f "$KOBO_DIR/Makefile" ] || {
+	echo "no Koboard checkout at $KOBO_DIR (set KOBOARD_DIR)" >&2; exit 2; }
 DEVICES="${DEVICES:-glo glohd}"
 FIXTURE="${1:-typical}"
 [ $# -gt 0 ] && shift
@@ -24,7 +27,7 @@ DATA="tests/ui/fixtures/$FIXTURE.json"
 [ -f "$DATA" ] || { echo "no fixture $DATA" >&2; exit 2; }
 
 make -s -C "$KOBO_DIR" preview-bin font >/dev/null
-BIN="$KOBO_DIR/build/homesrv-preview"
+BIN="$KOBO_DIR/build/koboard-preview"
 
 for dev in $DEVICES; do
 	# The client's own table of panel sizes, so the width the tree is built

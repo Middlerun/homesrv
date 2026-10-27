@@ -8,9 +8,9 @@ Household task tracking web app. PHP 8.1+, SQLite, HTMX, BladeOne templating.
 - **Task log** — complete/defer/create/edit actions with history
 - **Calendar feeds** — iCal (`.ics`) feeds via Sabre/VObject, color-coded, cached
 - **Weather** — current conditions + 5-day forecast via Open-Meteo (no API key)
-- **Dashboard** — dark-themed wall display with tasks, calendar, and weather
+- **Web dashboard** — dark-themed wall display with tasks, calendar, and weather
 - **Mobile interface** — light-themed layout for phones
-- **Kobo client** — native e-ink dashboard for Kobo e-readers (see [`kobo/README.md`](kobo/README.md))
+- **Kobo dashboard** — serves a dashboard to Koboard, a native e-ink client for Kobo e-readers, at `/api/ui.php`
 
 ## Requirements
 
@@ -84,4 +84,3 @@ Clean up with `rm database/test.sqlite` when done.
 - `views/` — Blade templates; compiled cache in `cache/`
 - `database/` — SQLite database and schema
 - `bin/` — CLI scripts
-- `kobo/` — native e-ink client for Kobo e-readers

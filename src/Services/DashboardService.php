@@ -13,7 +13,7 @@ use HomeSrv\Models\Task;
  * events, and the weather.
  *
  * Both /api/dashboard.php (raw data) and /api/ui.php (a laid-out UI tree built
- * from it) read from here, and the fixtures in kobo/fixtures/ are recordings
+ * from it) read from here, and the fixtures in tests/ui/fixtures/ are recordings
  * of this shape.
  */
 class DashboardService

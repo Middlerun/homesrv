@@ -33,7 +33,7 @@ Clean up with `rm database/test.sqlite` when done.
 - Services (`src/Services/`) contain business logic (recurrence, calendar, weather)
 - Views use Blade syntax in `views/`, compiled cache in `cache/`
 - Dashboard has its own dark-themed layout (`layouts/dashboard.blade.php`, `dashboard.css`)
-- The Kobo client's UI is built server-side in `src/Ui/` and served by `/api/ui.php`
+- The Kobo dashboard is a UI tree built in `src/Ui/` and served by `/api/ui.php`, for the Koboard client
 - Mobile interface uses the light-themed layout (`layouts/app.blade.php`, `app.css`)
 
 ## Common tasks
@@ -42,46 +42,33 @@ Clean up with `rm database/test.sqlite` when done.
 - **Reset DB**: `rm database/homesrv.sqlite && php bin/setup.php`
 - **Fetch calendars**: `php bin/fetch-calendars.php` (also meant for cron)
 
-## Kobo client
+## Koboard (the Kobo e-reader client)
 
-`kobo/` holds a native e-ink client for Kobo e-readers (C + FBInk,
-cross-compiled via the NickelTC podman image, launched by NickelMenu on the
-device). Build with `make -C kobo`; install onto a USB-mounted Kobo with
-`make -C kobo install`. See `kobo/README.md`.
+The e-ink client lives in its own repo, Koboard, expected as a sibling
+checkout at `../koboard` (override with `KOBOARD_DIR`). It is a general-purpose
+client: it fetches a UI tree from a URL, lays it out and paints it, and knows
+nothing about HomeSrv. This repo is one server for it.
 
-The UI is declarative *and server-built*: `src/Ui/DashboardScreen.php` produces
-a tree of nodes, `/api/ui.php` serves it, and the client's layout engine assigns
-every node a rect. Touch targets come from the painted tree, so never hard-code
-hit rectangles. The schema is `kobo/docs/ui-schema.md`.
+What the dashboard looks like is decided here, in `src/Ui/`:
+`DashboardScreen.php` builds the tree and `/api/ui.php` serves it. The wire
+format is Koboard's `docs/ui-schema.md`; `src/Ui/Node.php` validates every
+property against it, so a typo throws here instead of being silently ignored on
+the device. Touch targets come from the painted tree, so never hard-code hit
+rectangles.
 
-**Change the dashboard's appearance in `src/Ui/`, not in C.** The device only
-needs rebuilding when the engine changes; `kobo/src/screens.c` is now just the
-chrome that must survive the server being down: the status line with its two
-invisible corner targets (refresh, menu), the message screen, and the menu that
-switches between the servers in `kobo/src/config.c`'s config file. Even the
-clock is server-sent, as a `{clock:...}` placeholder the device fills in each
-frame (see `UiVars` in `kobo/src/ui_json.h`).
-
-**Do not iterate on Kobo layout by cross-compiling and reinstalling.** The
-layout engine builds for the host. For the dashboard (`src/Ui/`):
+**Do not iterate on the dashboard by reinstalling the client.** Koboard's layout
+engine builds for the host:
 
 ```bash
-bin/kobo-preview                       # PNGs in kobo/build/, ~1s
+bin/kobo-preview                       # PNGs in ../koboard/build/, ~1s
 bin/kobo-preview overflow              # busy day; also: empty, finished
 bin/test-ui                            # the trees /api/ui.php sends, vs goldens
 ```
 
 After a deliberate dashboard change, `bin/test-ui` will fail; check the PNGs,
 then `bin/test-ui --update` to accept. Data fixtures are in `tests/ui/fixtures/`
-(recordings of `/api/dashboard.php`).
+(recordings of `/api/dashboard.php`). `bin/test-ui` needs only PHP;
+`bin/kobo-preview` needs the Koboard checkout.
 
-The client is tested on its own, against UI-tree fixtures, with no PHP
-involved — it is meant to be extractable as a standalone app:
-
-```bash
-make -C kobo test                      # golden rect comparison
-make -C kobo golden                    # accept after a deliberate engine change
-```
-
-The protocol (screen URL, bearer token, envelope fields) is in
-`kobo/docs/ui-schema.md` under "The wire".
+Changes to the client itself — its layout engine, chrome, menu or protocol
+handling — belong in Koboard, not here.

@@ -8,9 +8,9 @@ namespace HomeSrv\Ui;
  * Point sizes are resolved to pixels on the device, against its own DPI, so
  * this stays resolution-independent. Only the spacing scales with the width.
  *
- * `margin` uses the same formula as the Kobo client's own (theme_init() in
- * kobo/src/screens.c), so the body lines up with the status line the client
- * draws under it.
+ * `margin` uses the same formula as Koboard's own (theme_init() in its
+ * src/screens.c), so the body lines up with the status line the client draws
+ * under it.
  */
 final class Theme
 {
