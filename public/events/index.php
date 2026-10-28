@@ -9,4 +9,11 @@ Bootstrap::init();
 
 $events = CalendarService::getUpcomingEvents(7, false);
 
-echo Bootstrap::blade()->run('events.index', ['events' => $events]);
+$status = null;
+foreach (['success', 'error'] as $type) {
+    if ($message = Bootstrap::getFlash($type)) {
+        $status = ['type' => $type, 'message' => $message];
+    }
+}
+
+echo Bootstrap::blade()->run('events.index', ['events' => $events, 'status' => $status]);

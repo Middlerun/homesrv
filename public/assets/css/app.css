@@ -315,3 +315,12 @@ label {
 .event-action {
     flex-shrink: 0;
 }
+
+.refresh-busy,
+.htmx-request .refresh-label {
+    display: none;
+}
+
+.htmx-request .refresh-busy {
+    display: inline;
+}

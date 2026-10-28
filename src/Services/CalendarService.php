@@ -13,14 +13,17 @@ class CalendarService
 {
     /**
      * Fetch and cache all enabled feeds.
+     *
+     * @param bool $bypassCache When true, ask upstream/proxy caches for a fresh copy.
+     * @return int Number of feeds fetched successfully.
      */
-    public static function fetchAll(): int
+    public static function fetchAll(bool $bypassCache = false): int
     {
         $feeds = CalendarFeed::enabled();
         $count = 0;
 
         foreach ($feeds as $feed) {
-            if (self::fetchFeed($feed['id'], $feed['url'])) {
+            if (self::fetchFeed($feed['id'], $feed['url'], $bypassCache)) {
                 $count++;
             }
         }
@@ -31,10 +34,15 @@ class CalendarService
     /**
      * Fetch a single feed and cache it.
      */
-    public static function fetchFeed(int $id, string $url): bool
+    public static function fetchFeed(int $id, string $url, bool $bypassCache = false): bool
     {
+        $http = ['timeout' => 15];
+        if ($bypassCache) {
+            $http['header'] = "Cache-Control: no-cache\r\nPragma: no-cache\r\n";
+        }
+
         $ctx = stream_context_create([
-            'http' => ['timeout' => 15],
+            'http' => $http,
             'ssl' => ['verify_peer' => true],
         ]);
 

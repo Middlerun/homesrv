@@ -1,3 +1,6 @@
+@if(!empty($status))
+    <p style="color: var(--color-{{ $status['type'] === 'success' ? 'success' : 'danger' }}); margin-bottom: 1rem;">{{ $status['message'] }}</p>
+@endif
 @if(empty($events))
     <p style="color: var(--color-text-muted); margin-top: 1rem;">No upcoming events.</p>
 @else
