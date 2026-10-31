@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+use HomeSrv\Auth;
 use HomeSrv\Bootstrap;
 use HomeSrv\Models\CalendarFeed;
 use HomeSrv\Models\Setting;
@@ -19,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Setting::set('app_password_hash', password_hash($password, PASSWORD_DEFAULT));
                 Bootstrap::flash('success', 'Password saved.');
                 if (empty($_SESSION['authenticated'])) {
-                    $_SESSION['authenticated'] = true;
+                    Auth::markAuthenticated();
                 }
             }
             break;

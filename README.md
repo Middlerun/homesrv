@@ -48,12 +48,13 @@ All configuration lives in **Settings** in the web UI:
 - **Calendar feeds** — iCal URLs with a display color
 - **Weather** — latitude, longitude, units (celsius/fahrenheit)
 - **Timezone** — used for due-date calculations
-- **API token** — used by the Kobo client and API endpoints
+- **API token** — used by Koboard and the API endpoints
 
 ## API
 
-JSON API, authenticated via the `X-Api-Token` header (the Settings API token).
+JSON API, authenticated with the Settings API token as a bearer token: `Authorization: Bearer <token>`.
 
+- `GET /api/ui.php` — the Kobo dashboard as a Koboard UI tree (`?w=`, `&h=`, `&dpi=` give the panel size)
 - `GET /api/dashboard.php` — tasks (today/overdue/future), today & tomorrow's calendar events, weather
 - `GET /api/ping.php` — health check
 - `POST /api/tasks/complete.php` — complete a task
@@ -71,6 +72,19 @@ curl -s "http://localhost:8082/tasks/?_db=test.sqlite"
 
 Clean up with `rm database/test.sqlite` when done.
 
+`?_db` is off unless the web server sets `HOMESRV_ALLOW_TEST_DB=1` (for Apache: `SetEnv HOMESRV_ALLOW_TEST_DB 1`), and it only opens a database that already exists; otherwise the request gets a 404 rather than falling back to the real database. Only set it on a development machine — see [Security](#security).
+
+The Kobo dashboard has its own tests: `bin/test-ui` checks the UI trees `/api/ui.php` builds against goldens, and `bin/kobo-preview` draws them with Koboard's layout engine (it expects a Koboard checkout at `../koboard`).
+
+## Security
+
+HomeSrv is built for a trusted home network, not the open internet:
+
+- **No HTTPS of its own.** The app password, session cookies and API token travel unencrypted unless you put it behind a reverse proxy that terminates TLS. Do that before exposing it beyond your LAN.
+- **One shared password** for the whole household; users are chosen after login, not authenticated separately.
+- **Turn off PHP's error display** (`display_errors = Off`) on any server others can reach: error pages reveal file paths.
+- **Never set `HOMESRV_ALLOW_TEST_DB`** outside development: it lets a URL parameter choose which database a request uses.
+
 ## Maintenance
 
 - **Fetch calendars**: `php bin/fetch-calendars.php` (also meant for cron)
@@ -81,6 +95,12 @@ Clean up with `rm database/test.sqlite` when done.
 - `public/` — web root; filesystem-based routing (URLs map to PHP files)
 - `src/Models/` — static classes with PDO queries
 - `src/Services/` — business logic (recurrence, calendar, weather)
+- `src/Ui/` — the Kobo dashboard, as a Koboard UI tree
 - `views/` — Blade templates; compiled cache in `cache/`
 - `database/` — SQLite database and schema
 - `bin/` — CLI scripts
+- `tests/ui/` — dashboard data fixtures and UI-tree goldens
+
+## Licence
+
+MIT — see [LICENSE](LICENSE).

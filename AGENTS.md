@@ -6,7 +6,6 @@ Household task tracking web app. PHP 8.1+, SQLite, HTMX, BladeOne templating.
 
 - **Web root**: `public/` (served by Apache on port 8082)
 - **Database**: `database/homesrv.sqlite` (created by `php bin/setup.php`)
-- **Plan**: `~/.claude/plans/sunny-frolicking-bentley.md`
 
 ## Testing
 
@@ -19,6 +18,8 @@ curl -s "http://localhost:8082/tasks/?_db=test.sqlite"
 ```
 
 Clean up with `rm database/test.sqlite` when done.
+
+`?_db` only works when the web server sets `HOMESRV_ALLOW_TEST_DB=1` (for Apache: `SetEnv HOMESRV_ALLOW_TEST_DB 1`), and only for a database that already exists. Otherwise the request gets a 404 rather than falling back to the real database, so a test can never write to production data by accident. Never set it on a server other people can reach: test databases are switched by a URL parameter, so anyone could use one. A login only counts for the database it was made against, so signing in to a test database does not sign you in to the real one.
 
 ## Architecture
 

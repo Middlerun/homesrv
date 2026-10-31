@@ -9,6 +9,16 @@ class Auth
 {
     public static function check(): void
     {
+        // A login only counts for the database it was checked against. With
+        // test databases switched on (?_db=), signing in to one must not open
+        // the real one too — and a session from before this check existed has
+        // no record at all, so it signs in again once.
+        if (!empty($_SESSION['authenticated'])
+            && ($_SESSION['database'] ?? null) !== Database::path()) {
+            unset($_SESSION['authenticated'], $_SESSION['database'],
+                $_SESSION['user_id'], $_SESSION['user_name']);
+        }
+
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $isSettings = str_starts_with($path, '/settings');
         $passwordHash = Setting::get('app_password_hash');
@@ -42,10 +52,22 @@ class Auth
     {
         $hash = Setting::get('app_password_hash');
         if ($hash && password_verify($password, $hash)) {
-            $_SESSION['authenticated'] = true;
+            self::markAuthenticated();
             return true;
         }
         return false;
+    }
+
+    /**
+     * Sign this session in, to the database this request is using. The
+     * session gets a new ID, so one handed out before signing in (planted by
+     * someone else, say) is useless afterwards.
+     */
+    public static function markAuthenticated(): void
+    {
+        session_regenerate_id(true);
+        $_SESSION['authenticated'] = true;
+        $_SESSION['database'] = Database::path();
     }
 
     public static function selectUser(int $userId): bool

@@ -13,12 +13,8 @@ class Bootstrap
         require_once __DIR__ . '/../vendor/autoload.php';
         session_start();
 
-        // Allow alternate database via ?_db= (test databases only)
-        if (!empty($_GET['_db'])) {
-            $name = basename($_GET['_db']);
-            if (preg_match('/^[a-zA-Z0-9_-]+\.sqlite$/', $name) && $name !== 'homesrv.sqlite') {
-                Database::setPath(__DIR__ . '/../database/' . $name);
-            }
+        if (isset($_GET['_db'])) {
+            self::useTestDatabase((string) $_GET['_db']);
         }
 
         // Ensure DB exists
@@ -31,6 +27,32 @@ class Bootstrap
         } else {
             Auth::check();
         }
+    }
+
+    /**
+     * Serve this request from a test database instead (?_db=, see AGENTS.md).
+     *
+     * A development aid, so it is off unless the server opts in with
+     * HOMESRV_ALLOW_TEST_DB=1 — otherwise any visitor could point a request at
+     * a database whose password they control. It only opens a database that
+     * already exists (opening a missing SQLite file creates it), and it refuses
+     * rather than quietly falling back to the real database, so a test run can
+     * never land on real data because the switch was off.
+     */
+    private static function useTestDatabase(string $requested): void
+    {
+        $allowed = ($_SERVER['HOMESRV_ALLOW_TEST_DB'] ?? getenv('HOMESRV_ALLOW_TEST_DB')) === '1';
+        $name = basename($requested);
+
+        if (!$allowed
+            || !preg_match('/^[a-zA-Z0-9_-]+\.sqlite$/', $name)
+            || $name === 'homesrv.sqlite'
+            || !is_file(Database::pathFor($name))) {
+            http_response_code(404);
+            header('Content-Type: text/plain');
+            exit("Test database not available.\n");
+        }
+        Database::setPath(Database::pathFor($name));
     }
 
     public static function blade(): BladeOne
